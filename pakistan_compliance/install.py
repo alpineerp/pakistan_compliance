@@ -155,6 +155,13 @@ CUSTOM_FIELDS = {
 }
 
 
+# FBR reporting of point-of-sale sales (POS Invoice support): see pos/fields.py
+from pakistan_compliance.pos.fields import POS_CUSTOM_FIELDS  # noqa: E402
+
+for _doctype, _fields in POS_CUSTOM_FIELDS.items():
+	CUSTOM_FIELDS.setdefault(_doctype, []).extend(_fields)
+
+
 def _place_party_section(doctype):
 	"""Position the Pakistan Tax section right after `tax_withholding_category` via a
 	DocType-level `field_order` property setter, so the labeled section renders

@@ -180,6 +180,15 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
+# Retry FBR reporting of POS sales that could not reach FBR (pakistan_compliance/pos/queue.py)
+scheduler_events = {
+	"cron": {
+		"* * * * *": [
+			"pakistan_compliance.pos.queue.retry_due",
+		],
+	},
+}
+
 # scheduler_events = {
 # 	"all": [
 # 		"pakistan_compliance.tasks.all"

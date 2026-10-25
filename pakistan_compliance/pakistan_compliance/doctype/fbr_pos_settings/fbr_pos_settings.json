@@ -1,0 +1,153 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-10-25 16:00:00.000000",
+ "doctype": "DocType",
+ "docstatus": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "environment_section",
+  "environment",
+  "environment_col",
+  "max_attempts",
+  "request_timeout",
+  "pos_section",
+  "pos_base_url",
+  "pos_token",
+  "pos_col",
+  "pos_id",
+  "seller_ntn",
+  "receipt_section",
+  "show_qr",
+  "receipt_notice",
+  "receipt_col",
+  "fbr_logo"
+ ],
+ "fields": [
+  {
+   "fieldname": "environment_section",
+   "fieldtype": "Section Break",
+   "label": "Where POS sales are reported"
+  },
+  {
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "label": "Environment",
+   "options": "Mock\nSandbox\nProduction",
+   "default": "Mock",
+   "reqd": 1,
+   "description": "Mock never contacts FBR: it issues numbers starting MOCK- so a POS, its receipts and the retry queue can be tried safely. Use Sandbox for FBR's test system and Production only once FBR has approved the POS. Applies to FBR POS and to Digital Invoicing of POS sales; Sales Invoices reported by hand still follow Pakistan Tax Settings."
+  },
+  {
+   "fieldname": "environment_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "max_attempts",
+   "fieldtype": "Int",
+   "label": "Give Up After (tries)",
+   "default": "10",
+   "description": "A sale that cannot reach FBR is retried with growing waits (30 seconds up to 1 hour), then marked Failed so a manager can retry it."
+  },
+  {
+   "fieldname": "request_timeout",
+   "fieldtype": "Int",
+   "label": "Wait For FBR (seconds)",
+   "default": "20"
+  },
+  {
+   "fieldname": "pos_section",
+   "fieldtype": "Section Break",
+   "label": "FBR POS (Tier-1 retailers)",
+   "description": "Digital Invoicing of POS sales uses Pakistan Tax Settings (token, environment details)."
+  },
+  {
+   "fieldname": "pos_base_url",
+   "fieldtype": "Data",
+   "label": "FBR POS Service URL",
+   "description": "Endpoint FBR gave you for posting invoices. To confirm against FBR's documentation: no default is assumed."
+  },
+  {
+   "fieldname": "pos_token",
+   "fieldtype": "Password",
+   "label": "FBR POS Token"
+  },
+  {
+   "fieldname": "pos_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pos_id",
+   "fieldtype": "Data",
+   "label": "POS ID",
+   "description": "The POS ID FBR registered for this business or terminal."
+  },
+  {
+   "fieldname": "seller_ntn",
+   "fieldtype": "Data",
+   "label": "Seller NTN",
+   "description": "Leave empty to use the Company's NTN, then Tax ID."
+  },
+  {
+   "fieldname": "receipt_section",
+   "fieldtype": "Section Break",
+   "label": "Receipt"
+  },
+  {
+   "fieldname": "show_qr",
+   "fieldtype": "Check",
+   "label": "Print QR Code",
+   "default": "1"
+  },
+  {
+   "fieldname": "receipt_notice",
+   "fieldtype": "Small Text",
+   "label": "Notice",
+   "default": "Verify this invoice through the FBR Tax Asaan mobile app or by SMS to 9966."
+  },
+  {
+   "fieldname": "receipt_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fbr_logo",
+   "fieldtype": "Attach Image",
+   "label": "FBR Logo",
+   "description": "Upload the logo FBR supplied. Until then a plain FBR text mark is shown."
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-25 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Pakistan Compliance",
+ "name": "FBR POS Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
