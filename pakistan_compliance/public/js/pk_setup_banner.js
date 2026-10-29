@@ -1,4 +1,4 @@
-// Copyright (c) 2026, Sowaan and contributors
+// Copyright (c) 2026, AlpineERP and contributors
 // For license information, please see license.txt
 
 // Onboarding banner: nudge admins to run the Pakistan Compliance setup wizard

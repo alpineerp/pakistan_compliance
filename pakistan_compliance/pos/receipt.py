@@ -1,11 +1,12 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """What a receipt needs to print about FBR: the number, the QR code and the notice."""
 
 import io
 
-import pyqrcode
+import qrcode
+import qrcode.image.svg
 
 import frappe
 
@@ -25,8 +26,18 @@ def qr_svg(content):
 	if not content:
 		return ""
 	buffer = io.BytesIO()
-	pyqrcode.create(content, error="M").svg(buffer, scale=4, xmldecl=False, svgns=True, quiet_zone=1)
-	return buffer.getvalue().decode()
+	image = qrcode.make(
+		content,
+		image_factory=qrcode.image.svg.SvgPathImage,
+		box_size=4,
+		border=1,
+	)
+	image.save(buffer)
+	svg = buffer.getvalue().decode()
+	# qrcode writes an XML declaration; drop it so the markup can be embedded in HTML.
+	if svg.startswith("<?xml"):
+		svg = svg.split("?>", 1)[-1].lstrip()
+	return svg
 
 
 def status_of(doctype, name):

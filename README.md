@@ -76,8 +76,9 @@ It is the Pakistan counterpart to the KSA localization apps (`ksa_print_formats`
 | **v15** | `main` |
 | **v16** | `version-16` |
 
-The two branches are kept in step; only `[tool.bench.frappe-dependencies]` in
-`pyproject.toml` differs.
+The two branches are kept in step, and the same code runs on both versions —
+v16-only behaviour (item-level withholding, the Apps launcher, the desktop icon
+grid) is feature-detected rather than forked.
 
 ## Installation
 
@@ -85,10 +86,10 @@ From your bench directory, on the branch that matches your ERPNext version:
 
 ```bash
 # ERPNext v15
-bench get-app https://github.com/sowaan/pakistan_compliance --branch main
+bench get-app https://github.com/muqeetmughal/pakistan_compliance --branch main
 
 # ERPNext v16
-bench get-app https://github.com/sowaan/pakistan_compliance --branch version-16
+bench get-app https://github.com/muqeetmughal/pakistan_compliance --branch version-16
 
 bench --site <your-site> install-app pakistan_compliance
 ```
@@ -133,5 +134,5 @@ any cost is your own FBR/PRAL Digital Invoicing subscription, not the connector.
 
 ## Support
 
-By Sowaan — support@sowaan.com. Issues and contributions welcome on the
-[GitHub repository](https://github.com/sowaan/pakistan_compliance).
+By AlpineERP — infintrixtech@gmail.com. Issues and contributions welcome on the
+[GitHub repository](https://github.com/muqeetmughal/pakistan_compliance).

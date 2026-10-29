@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Install / migrate setup for Pakistan Compliance (Phase 1).
@@ -262,32 +262,44 @@ def ensure_settings_defaults():
 
 
 def ensure_pk_desktop_icon():
-	"""On v16, make the desktop icon the Pakistan Compliance *workspace* (a "Link"
-	Desktop Icon) with its `app` set, so it opens in the same tab and shows the
-	pk_compliance logo (from the public/icons sprite) instead of a letter avatar.
-	An "App"-type icon (e.g. a leftover from add_to_apps_screen) is removed.
-	Mirrors the tarceel_erpnext approach. Idempotent; no-op on v15."""
+	"""On sites that still use the older "Icons" desktop grid, make the app's tile the
+	workspace itself (a "Link" icon, same tab, pk-compliance logo) instead of the
+	"App"-type icon generated from add_to_apps_screen (which opens in a new tab).
+
+	Frappe v16 defaults Desktop Settings -> Desktop Page to "Apps", whose launcher is
+	built from add_to_apps_screen and never reads Desktop Icon rows; there this is a
+	no-op. Idempotent; also a no-op on v15 (no Desktop Icon doctype)."""
 	if not frappe.db.exists("DocType", "Desktop Icon"):
 		return  # not v16
 
-	from frappe.desk.doctype.desktop_icon.desktop_icon import create_desktop_icons
+	try:
+		from frappe.desk.doctype.desktop_icon.desktop_icon import is_desktop_icons_page
+	except ImportError:
+		return
 
+	if not is_desktop_icons_page():
+		return  # v16 "Apps" page: the hook is the tile, no icon row is used
+
+	label = "Pakistan Compliance"
 	current = frappe.db.get_value(
-		"Desktop Icon", "Pakistan Compliance", ["icon_type", "app", "parent_icon", "icon"], as_dict=True
+		"Desktop Icon", label, ["icon_type", "app", "icon", "parent_icon"], as_dict=True
 	)
 	if current and current.icon_type == "App":
-		frappe.delete_doc("Desktop Icon", "Pakistan Compliance", ignore_permissions=True, force=True)
+		# Both kinds share the label as docname, so the generated App icon has to go
+		# before the workspace icon can take that name.
+		frappe.delete_doc("Desktop Icon", label, ignore_permissions=True, force=True)
 		current = None
 
 	if not current:
-		create_desktop_icons()  # regenerates the workspace Link icon
-		current = frappe.db.get_value(
-			"Desktop Icon", "Pakistan Compliance", ["icon_type", "app", "parent_icon", "icon"], as_dict=True
-		)
-
-	# Frappe sets `app_name` (not `app`) on workspace icons, so the logo lookup
-	# fails and it falls back to a letter avatar; fix `app` and detach from folders.
-	if current:
+		icon = frappe.new_doc("Desktop Icon")
+		icon.label = label
+		icon.icon_type = "Link"
+		icon.link_type = "Workspace Sidebar"
+		icon.link_to = label
+		icon.icon = "pk-compliance"
+		icon.app = "pakistan_compliance"
+		icon.insert(ignore_if_duplicate=True, ignore_links=True)
+	else:
 		changes = {}
 		if current.app != "pakistan_compliance":
 			changes["app"] = "pakistan_compliance"
@@ -296,8 +308,9 @@ def ensure_pk_desktop_icon():
 		if current.parent_icon:
 			changes["parent_icon"] = None
 		if changes:
-			frappe.db.set_value("Desktop Icon", "Pakistan Compliance", changes)
-			frappe.cache.hdel("desktop_icons", "Administrator")
+			frappe.db.set_value("Desktop Icon", label, changes)
+
+	frappe.cache.hdel("desktop_icons", "Administrator")
 
 
 def boot_fix_desktop_icon(bootinfo=None):

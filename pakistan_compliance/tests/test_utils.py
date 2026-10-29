@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Offline tests for the Urdu amount-in-words helper (Phase 3)."""

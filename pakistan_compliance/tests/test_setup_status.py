@@ -1,15 +1,15 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Coverage for the setup-wizard backend (setup_status)."""
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 from pakistan_compliance import setup_status
 
 
-class TestSetupStatus(FrappeTestCase):
+class TestSetupStatus(IntegrationTestCase):
 	def test_get_setup_state_shape(self):
 		state = setup_status.get_setup_state()
 		for key in ("company", "companies", "provinces", "identity", "tax_seeded", "fbr", "show_urdu"):

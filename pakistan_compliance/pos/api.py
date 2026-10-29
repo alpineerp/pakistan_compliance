@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Entry points for a point of sale (alpine_pos) and the FBR POS Settings form.

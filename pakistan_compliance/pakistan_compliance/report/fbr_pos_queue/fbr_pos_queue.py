@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Point-of-sale sales waiting for, or refused by, FBR: what a supervisor looks at when a sale

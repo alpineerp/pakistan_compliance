@@ -1,5 +1,5 @@
-# Copyright (c) 2026, Sowaan and contributors
-# For license information, please see license.txt
+// Copyright (c) 2026, AlpineERP and contributors
+// For license information, please see license.txt
 
 frappe.ui.form.on("FBR POS Settings", {
 	refresh(frm) {

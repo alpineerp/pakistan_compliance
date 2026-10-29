@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Custom Fields for FBR reporting of point-of-sale sales (merged into install.CUSTOM_FIELDS).

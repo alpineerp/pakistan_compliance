@@ -1,11 +1,11 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Phase 3 coverage: the Pakistan print formats exist and the default-print-format
 seeding behaves (force on install, respect edits on migrate)."""
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 from pakistan_compliance.install import DEFAULT_PRINT_FORMATS, ensure_default_print_formats
 
@@ -30,7 +30,7 @@ def _default_ps(doctype):
 	)
 
 
-class TestPakistanPrintFormats(FrappeTestCase):
+class TestPakistanPrintFormats(IntegrationTestCase):
 	def test_all_formats_shipped(self):
 		for name, doctype in SHIPPED_FORMATS.items():
 			pf = frappe.db.get_value("Print Format", name, ["doc_type", "standard"], as_dict=True)

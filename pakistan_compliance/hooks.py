@@ -1,10 +1,10 @@
 app_name = "pakistan_compliance"
 app_title = "Pakistan Compliance"
-app_publisher = "Sowaan"
+app_publisher = "AlpineERP"
 app_description = "Pakistan localization for ERPNext: FBR sales tax invoices, tax setup, withholding tax, print formats, and FBR digital invoicing."
-app_email = "support@sowaan.com"
+app_email = "infintrixtech@gmail.com"
 app_license = "mit"
-source_link = "https://github.com/sowaan/pakistan_compliance"
+source_link = "https://github.com/muqeetmughal/pakistan_compliance"
 # Small (128x128) icon for the navbar / app switcher; the full 500x500 is used for
 # the marketplace listing.
 app_logo_url = "/assets/pakistan_compliance/images/pk_compliance_icon.svg"
@@ -15,15 +15,27 @@ app_include_icons = ["/assets/pakistan_compliance/icons/pk_compliance-icons.svg"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["erpnext"]
 
-# Note: we deliberately do NOT register `add_to_apps_screen`. On v16 that creates
-# an "App"-type desktop icon whose route is an absolute URL (opens in a new tab)
-# and which renders a letter avatar ("P") instead of the logo. Instead the desktop
-# icon is the workspace itself (a "Link" icon) with its `app` set, configured in
-# install.ensure_pk_desktop_icon; the logo comes from the custom icon sprite
-# public/icons/pk_compliance-icons.svg (symbol id "icon-pk-compliance"), referenced
-# by the workspace's `icon` field ("pk-compliance").
+# Each item in the list will be shown as an app in the apps page.
+# Frappe v16's /apps launcher draws its tiles exclusively from this hook
+# (frappe.boot.get_app_data), so an app that omits it is invisible on a default
+# v16 site. `route` is the workspace; v16 redirects /app/* to /desk/*, so the same
+# value works on v15 and v16.
+add_to_apps_screen = [
+	{
+		"name": "pakistan_compliance",
+		"logo": "/assets/pakistan_compliance/images/pk_compliance_icon.svg",
+		"title": "Pakistan Compliance",
+		"route": "/app/pakistan-compliance",
+	}
+]
+
+# On sites that use the older "Icons" desktop (Desktop Settings -> Desktop Page),
+# install.ensure_pk_desktop_icon replaces the generated "App"-type icon with the
+# workspace "Link" icon so it opens in the same tab with the pk-compliance logo.
+# The logo comes from the custom icon sprite public/icons/pk_compliance-icons.svg
+# (symbol id "icon-pk-compliance"), referenced by the workspace's `icon` field.
 
 # Includes in <head>
 # ------------------

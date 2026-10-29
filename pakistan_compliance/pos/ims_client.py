@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """FBR POS (IMS, Tier-1 retailers): each sale is posted to FBR, which answers with a fiscal

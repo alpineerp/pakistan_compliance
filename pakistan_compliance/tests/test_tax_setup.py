@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Phase 2 coverage: the Pakistan tax templates/rates the setup button seeds.
@@ -8,12 +8,12 @@ templates. The end-to-end creation (accounts + templates for a real Company) is
 verified against a live Company with a Chart of Accounts.
 """
 
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 from pakistan_compliance import tax_setup
 
 
-class TestTaxSetup(FrappeTestCase):
+class TestTaxSetup(IntegrationTestCase):
 	def test_sales_templates_cover_defaults(self):
 		titles = [title for title, _rows in tax_setup._sales_templates()]
 		for expected in (

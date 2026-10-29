@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Phase 1 coverage: the Pakistan Tax Settings single and the master-data fields.
@@ -8,12 +8,12 @@ and that credentials save into the encrypted Password field.
 """
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 from pakistan_compliance.install import CUSTOM_FIELDS, ensure_custom_fields
 
 
-class TestPakistanSetup(FrappeTestCase):
+class TestPakistanSetup(IntegrationTestCase):
 	def test_settings_is_single(self):
 		self.assertTrue(frappe.db.exists("DocType", "Pakistan Tax Settings"))
 		self.assertTrue(frappe.get_meta("Pakistan Tax Settings").issingle)

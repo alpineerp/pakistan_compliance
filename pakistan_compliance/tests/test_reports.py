@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Phase 6 coverage: the FBR return annexures and the WHT statement.
@@ -9,7 +9,7 @@ against whatever company/data the site has, and skip if none is set up (so they
 pass on a bare CI site and verify for real on a configured one)."""
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 from frappe.utils import flt
 
 from pakistan_compliance.pakistan_compliance.report.pakistan_sales_tax_annexure_a import (
@@ -42,7 +42,19 @@ def _gl_balance(company, account, from_date, to_date):
 	return flt(val)
 
 
-class TestReportStructure(FrappeTestCase):
+def _seed_wht():
+	"""WHT account + categories on the first company, inside the test transaction."""
+	from unittest import mock
+
+	from pakistan_compliance import wht_setup
+
+	company = frappe.get_all("Company", pluck="name", limit=1)[0]
+	with mock.patch.object(frappe.db, "commit"):
+		wht_setup.setup_company_wht(company)
+	return company
+
+
+class TestReportStructure(IntegrationTestCase):
 	def _run(self, mod):
 		company = frappe.db.get_value("Company", {}, "name")
 		cols, data = mod.execute({"company": company, **PERIOD})
@@ -58,6 +70,7 @@ class TestReportStructure(FrappeTestCase):
 		self.assertLessEqual({"invoice", "value_excl_tax", "input_tax", "total"}, fields)
 
 	def test_wht_statement_columns(self):
+		_seed_wht()
 		fields = self._run(wht_statement)
 		self.assertLessEqual({"supplier", "section", "tax_withheld"}, fields)
 
@@ -66,7 +79,7 @@ class TestReportStructure(FrappeTestCase):
 			annexure_c.execute({"company": None, "from_date": None, "to_date": None})
 
 
-class TestReportReconciliation(FrappeTestCase):
+class TestReportReconciliation(IntegrationTestCase):
 	def test_annexure_c_matches_output_tax_gl(self):
 		company, account = _company_with_account("Sales Tax Payable")
 		if not company:

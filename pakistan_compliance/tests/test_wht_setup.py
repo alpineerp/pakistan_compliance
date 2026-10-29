@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """Phase 4 coverage: the Pakistan withholding-tax categories the setup button seeds.
@@ -12,13 +12,26 @@ them in a test would give false confidence.
 """
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 from pakistan_compliance import wht_setup
 from pakistan_compliance.wht_setup import propagate_item_wht, sync_supplier_wht_category
 
 
-class TestWhtSetup(FrappeTestCase):
+def _seed_wht():
+	"""Create the WHT account + Filer/Non-Filer categories on the first company.
+
+	setup_company_wht() commits by design (it is a user action); patching the commit keeps
+	this inside the test's transaction, so the clean CI site is left untouched."""
+	from unittest import mock
+
+	company = frappe.get_all("Company", pluck="name", limit=1)[0]
+	with mock.patch.object(frappe.db, "commit"):
+		wht_setup.setup_company_wht(company)
+	return company
+
+
+class TestWhtSetup(IntegrationTestCase):
 	def test_core_sections_present(self):
 		sections = [s["section"] for s in wht_setup.WHT_SECTIONS]
 		for expected in ("153(1)(a)", "153(1)(b)", "153(1)(c)", "233", "155"):
@@ -40,7 +53,7 @@ class TestWhtSetup(FrappeTestCase):
 		self.assertGreater(wht_setup.WHT_RATES_TO, wht_setup.WHT_RATES_FROM)
 
 
-class TestWhtPropagation(FrappeTestCase):
+class TestWhtPropagation(IntegrationTestCase):
 	"""The v16 supplier -> item WHT propagation hook (no-op on v15)."""
 
 	def _pi(self):
@@ -67,7 +80,7 @@ class TestWhtPropagation(FrappeTestCase):
 		self.assertFalse(pi.items[0].get("tax_withholding_category"))
 
 
-class TestSupplierWhtSync(FrappeTestCase):
+class TestSupplierWhtSync(IntegrationTestCase):
 	"""Supplier Filer status -> WHT category variant sync (needs the seeded categories)."""
 
 	def _supplier(self, status, category):
@@ -78,6 +91,7 @@ class TestSupplierWhtSync(FrappeTestCase):
 		return s
 
 	def test_switches_variant_to_match_status(self):
+		_seed_wht()
 		s = self._supplier("Non-Filer", "Pakistan WHT 153(1)(b) Services (Filer)")
 		sync_supplier_wht_category(s)
 		self.assertEqual(s.tax_withholding_category, "Pakistan WHT 153(1)(b) Services (Non-Filer)")
@@ -85,6 +99,7 @@ class TestSupplierWhtSync(FrappeTestCase):
 	def test_keeps_section_with_parentheses(self):
 		# Section labels contain their own parens (155 ... (Company)); only the
 		# trailing (Filer)/(Non-Filer) variant is swapped.
+		_seed_wht()
 		s = self._supplier("Filer", "Pakistan WHT 155 Rent of Immovable Property (Company) (Non-Filer)")
 		sync_supplier_wht_category(s)
 		self.assertEqual(

@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Sowaan and contributors
+# Copyright (c) 2026, AlpineERP and contributors
 # For license information, please see license.txt
 
 """FBR reporting of point-of-sale sales: the retry queue, the FBR POS (IMS) client against a
@@ -15,7 +15,7 @@ from unittest import mock
 import requests
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 from frappe.utils import add_to_date, now_datetime
 
 from pakistan_compliance import fbr_client, fbr_invoice
@@ -35,7 +35,7 @@ def set_settings(**values):
 	doc.save(ignore_permissions=True)
 
 
-class TestPosFbr(FrappeTestCase):
+class TestPosFbr(IntegrationTestCase):
 	def setUp(self):
 		set_settings(environment="Mock", show_qr=1, max_attempts=10, request_timeout=20, pos_base_url="", pos_id="", pos_token="")
 		self.enqueued = []
@@ -56,11 +56,29 @@ class TestPosFbr(FrappeTestCase):
 		doc = frappe.new_doc(doctype)
 		doc.name = NAMES[doctype]
 		doc.company = frappe.get_all("Company", pluck="name", limit=1)[0]
-		doc.customer = frappe.get_all("Customer", pluck="name", limit=1)[0]
+		doc.customer = self._any_customer()
 		doc.posting_date = "2026-10-25"
 		doc.docstatus = 1
 		doc.db_insert()
 		return doc.name
+
+	def _any_customer(self):
+		"""A customer to point the sale at; built here so a clean site (no demo data) works."""
+		name = frappe.get_all("Customer", pluck="name", limit=1)
+		if name:
+			return name[0]
+		return (
+			frappe.get_doc(
+				{
+					"doctype": "Customer",
+					"customer_name": "PK POS Test Customer",
+					"customer_group": frappe.db.get_value("Customer Group", {"is_group": 0}, "name"),
+					"territory": frappe.db.get_value("Territory", {"is_group": 0}, "name"),
+				}
+			)
+			.insert(ignore_permissions=True)
+			.name
+		)
 
 	def drop_sales(self):
 		for doctype, name in NAMES.items():

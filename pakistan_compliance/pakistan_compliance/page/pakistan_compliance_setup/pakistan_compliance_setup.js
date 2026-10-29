@@ -1,4 +1,4 @@
-// Copyright (c) 2026, Sowaan and contributors
+// Copyright (c) 2026, AlpineERP and contributors
 // For license information, please see license.txt
 
 frappe.pages["pakistan-compliance-setup"].on_page_load = function (wrapper) {
@@ -101,7 +101,7 @@ class PkSetupWizard {
 						<div class="pk-brand-sub">${__("Guided setup")}</div></div>
 					</div>
 					<div class="pk-steps">${rail}</div>
-					<div class="pk-rail-foot">${__("by Sowaan")}</div>
+					<div class="pk-rail-foot">${__("by AlpineERP")}</div>
 				</aside>
 				<section class="pk-panel">
 					<div class="pk-progress"><div class="pk-progress-bar"></div></div>
