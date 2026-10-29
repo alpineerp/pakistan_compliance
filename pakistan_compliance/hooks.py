@@ -4,7 +4,7 @@ app_publisher = "AlpineERP"
 app_description = "Pakistan localization for ERPNext: FBR sales tax invoices, tax setup, withholding tax, print formats, and FBR digital invoicing."
 app_email = "infintrixtech@gmail.com"
 app_license = "mit"
-source_link = "https://github.com/muqeetmughal/pakistan_compliance"
+source_link = "https://github.com/alpineerp/pakistan_compliance"
 # Small (128x128) icon for the navbar / app switcher; the full 500x500 is used for
 # the marketplace listing.
 app_logo_url = "/assets/pakistan_compliance/images/pk_compliance_icon.svg"

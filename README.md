@@ -86,10 +86,10 @@ From your bench directory, on the branch that matches your ERPNext version:
 
 ```bash
 # ERPNext v15
-bench get-app https://github.com/muqeetmughal/pakistan_compliance --branch main
+bench get-app https://github.com/alpineerp/pakistan_compliance --branch main
 
 # ERPNext v16
-bench get-app https://github.com/muqeetmughal/pakistan_compliance --branch version-16
+bench get-app https://github.com/alpineerp/pakistan_compliance --branch version-16
 
 bench --site <your-site> install-app pakistan_compliance
 ```
@@ -135,4 +135,4 @@ any cost is your own FBR/PRAL Digital Invoicing subscription, not the connector.
 ## Support
 
 By AlpineERP — infintrixtech@gmail.com. Issues and contributions welcome on the
-[GitHub repository](https://github.com/muqeetmughal/pakistan_compliance).
+[GitHub repository](https://github.com/alpineerp/pakistan_compliance).
